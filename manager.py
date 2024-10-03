@@ -40,18 +40,17 @@ class Rollback_manager:
         self.data = self.read_csv()
         rollback_needed = False
 
-        #log the transaction
+        #log the transaction with id, field, before and after values and status
         self.logger.log(id, field, self.data[id][field], value, "PENDING")
 
         #transaction with unique id of five will always fail
         if id == '5' or field not in self.data[id]:
             rollback_needed = True
         
-        #update the value
+        #update the value in main memory
         self.data[id][field] = value
 
-        #log the transaction
-        print(f"Transaction {id} updated {field} to {value}")
+        print(f"Transaction {id} updated {field} : {self.logger[id]['before']} to {value}")
 
         #we saved the changes to the in memory data, now we have to check if the transaction is valid
         return rollback_needed, id
@@ -64,6 +63,7 @@ class Rollback_manager:
             log = self.logger[transaction_id]
             self.data[transaction_id][log['attribute']] = log['before']
             self.logger[transaction_id]['status'] = "ROLLED BACK"
+            print("Error on transaction number " + transaction_id + ". Rollback initiated.")
             print("Updating Log..." + str(log))
             print("Rollback successful")
             return False
