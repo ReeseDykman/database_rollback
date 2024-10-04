@@ -8,6 +8,7 @@ class Rollback_manager:
     def read_csv(self):
         #the data in main memory is a dictionary of dictionaries, the keys are the Unique_ID
         data = {}
+        print("Reading database.csv")
         with open('database.csv', 'r') as file:
             #grab all headers, they are the keys of the dictionary for our dictionaries
             headers = file.readline().strip().split(',')
@@ -65,12 +66,18 @@ class Rollback_manager:
             self.logger[transaction_id]['status'] = "ROLLED BACK"
             print("Error on transaction number " + transaction_id + ". Rollback initiated.")
             print("Updating Log..." + str(log))
+            self.logger.to_csv()
             print("Rollback successful")
             return False
         else:
             self.logger[transaction_id]['status'] = "COMMITTED"
             log = self.logger[transaction_id]
             print("Updating Log..." + str(log))
+            self.logger.to_csv()
             self.write_csv()
             print("Commit successful, changes saved to disk.")
             return True
+        
+    def print_csv(self):
+        with open('database.csv', 'r') as file:
+            print(file.read())

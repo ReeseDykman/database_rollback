@@ -12,4 +12,12 @@ class Logger:
 
     def print_logs(self):                                     
         for log in self.logs:
-            print(log)
+            print(str(log) + ":" + str(self.logs[log]))
+    
+    def to_csv(self):
+        with open('logs.csv', 'w') as file:
+            file.write("Transaction_ID,Attribute,Before,After,Status\n")
+            for id, log in self.logs.items():
+                line = f"{id},{log['attribute']},{log['before']},{log['after']},{log['status']}\n"
+                file.write(line)
+        print("Logs saved to logs.csv")
