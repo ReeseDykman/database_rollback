@@ -10,10 +10,11 @@ def main():
     print("\n\nCSV before transactions:\n")
     manager.print_csv()
     
-    #query all transactions, call commit to either rollback or commit changes
+    #loop through all transactions
     for index in range(len(transactions)):
         transaction = transactions[index]
         print(f"\n\nProcessing transaction {index + 1}")
+        #use the query method to process the transaction, either returns true or false for rollback needed and the transaction id
         rollback_required, trans_id = manager.query(transaction)
         if manager.commit(rollback_required, trans_id):
             print("Transaction committed")

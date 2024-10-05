@@ -28,7 +28,9 @@ class Rollback_manager:
         return data
     
     def write_csv(self):
+        #headers to write first
         header = "Unique_ID,First_name,Last_name,Salary,Department,Civil_status\n"
+        #loop through self.data and write the data to the file
         with open('database.csv', 'w') as file:
             file.write(header)
             for id, employee in self.data.items():
@@ -38,6 +40,8 @@ class Rollback_manager:
     
     def query(self, query: list):
         id, field, value = query
+
+        #we read the csv before every transaction to ensure we have the most up to date data
         self.data = self.read_csv()
         rollback_needed = False
 
@@ -59,7 +63,7 @@ class Rollback_manager:
 
     def commit(self, result: bool, transaction_id: str):
         
-        #if the result is true, wee need to rollback, else we save to disk
+        #if the result is true, we need to rollback, else we save to disk
         if result:
             log = self.logger[transaction_id]
             self.data[transaction_id][log['attribute']] = log['before']

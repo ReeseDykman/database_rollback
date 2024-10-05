@@ -3,6 +3,15 @@ class Logger:
         self.logs = {}
 
     def log(self, id, attribute, before, after, status):
+        """
+        adds a log to the logs dictionary
+        params:
+            id: the unique id of the transaction
+            attribute: the attribute that was changed
+            before: the value before the change
+            after: the value after the change
+            status: the status of the transaction
+        """
         log = {id : {"attribute" : attribute, "before" : before, "after" : after, "status" : status}}
         print("Logging transaction..." + str(log))
         self.logs.update(log)
